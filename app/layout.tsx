@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { RainbowKitProviders } from './providers/RainbowKit';
 import { ToastProvider } from './providers/ToastProvider';
+import BottomNavigation from './components/BottomNavigation';
+import './styles/fonts.css';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'uOS LP Staking',
@@ -18,9 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="min-h-screen bg-background text-foreground">
         <RainbowKitProviders>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            {children}
+            <BottomNavigation />
+          </ToastProvider>
         </RainbowKitProviders>
       </body>
     </html>
