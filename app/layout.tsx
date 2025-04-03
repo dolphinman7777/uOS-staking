@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { RainbowKitProviders } from './providers/RainbowKit';
+import { ToastProvider } from './providers/ToastProvider';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <RainbowKitProviders>{children}</RainbowKitProviders>
+        <RainbowKitProviders>
+          <ToastProvider>{children}</ToastProvider>
+        </RainbowKitProviders>
       </body>
     </html>
   );

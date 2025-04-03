@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAccount, useContractRead } from 'wagmi';
-import { formatEther } from 'viem';
+import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { formatEther, parseEther } from 'viem';
 import { CONTRACTS } from '@/config/contracts';
 
 const IERC20_ABI = [
@@ -63,13 +63,23 @@ export const useTokenBalance = (tokenAddress: string) => {
   const { address } = useAccount();
   const [balance, setBalance] = useState<string>('0');
 
-  const { data: balanceData } = useContractRead({
+  const { data: balanceData } = useReadContract({
     address: tokenAddress as `0x${string}`,
     abi: IERC20_ABI,
     functionName: 'balanceOf',
     args: [address as `0x${string}`],
-    enabled: !!address,
   });
+
+  const { writeContract: approve, isPending: isApproving } = useWriteContract();
+
+  const handleApprove = async (spender: string, amount: string) => {
+    await approve({
+      address: tokenAddress as `0x${string}`,
+      abi: IERC20_ABI,
+      functionName: 'approve',
+      args: [spender as `0x${string}`, parseEther(amount)],
+    });
+  };
 
   useEffect(() => {
     if (balanceData) {
@@ -77,5 +87,5 @@ export const useTokenBalance = (tokenAddress: string) => {
     }
   }, [balanceData]);
 
-  return { balance };
+  return { balance, handleApprove, isApproving };
 }; 

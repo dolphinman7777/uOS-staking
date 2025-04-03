@@ -8,19 +8,41 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#3B82F6', // Blue-500
-        secondary: '#6B7280', // Gray-500
-        background: {
-          DEFAULT: '#0F172A',
-          light: '#1E293B',
-        },
+        background: '#1e2124',
         text: {
-          DEFAULT: '#F8FAFC',
-          muted: '#94A3B8',
+          DEFAULT: '#767676',
+          white: '#ffffff',
         },
+        border: {
+          DEFAULT: '#987554',
+        },
+        glow: '#40E0D0',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        alliance: ['Alliance', 'sans-serif'],
+        mono: ['monospace'],
+      },
+      fontSize: {
+        'xs': ['0.75rem', { lineHeight: '1rem' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+        '6xl': ['3.75rem', { lineHeight: '1' }],
+      },
+      fontWeight: {
+        normal: '400',
+        medium: '450',
+        semibold: '500',
+      },
+      spacing: {
+        '0.5': '0.125rem',
+        '1': '0.25rem',
+        '1.5': '0.375rem',
+        '2': '0.5rem',
+        '3': '0.75rem',
+        '4': '1rem',
       },
     },
   },

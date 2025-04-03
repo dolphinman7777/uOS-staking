@@ -20,30 +20,64 @@ export const StakeCard = () => {
   };
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit} className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Stake LP Tokens</h3>
-        
-        <Input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Enter amount to stake"
-          className="mb-4"
-        />
-
-        <div className="text-sm text-text-muted">
-          Available: {Number(balance).toLocaleString()} LP
+    <div className="bg-white rounded-2xl p-8 shadow-lg">
+      <h2 className="text-2xl font-semibold text-[#6C5DD3] mb-8">Stake</h2>
+      
+      <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="bg-[#F7F5FF] rounded-xl p-4">
+          <div className="text-4xl font-semibold text-[#6C5DD3] mb-2">
+            {Number(balance).toLocaleString()} 
+          </div>
+          <div className="text-sm text-gray-600">Wallet Balance</div>
+          <div className="text-xs text-gray-500">LP Token</div>
         </div>
 
-        <Button
-          type="submit"
-          disabled={!amount || isStaking || Number(amount) <= 0 || Number(amount) > Number(balance)}
-          className="w-full"
-        >
-          {isStaking ? 'Staking...' : 'Stake LP Tokens'}
-        </Button>
+        <div className="bg-[#F7F5FF] rounded-xl p-4">
+          <div className="text-4xl font-semibold text-[#6C5DD3] mb-2">
+            120
+          </div>
+          <div className="text-sm text-gray-600">Rewards Period</div>
+          <div className="text-xs text-gray-500">Days</div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#F7F5FF] px-4 py-2 rounded-lg text-sm font-medium">
+            LP Token
+          </div>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Amount of LP Token to stake"
+            className="w-full pl-28 pr-20 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5DD3]/20"
+          />
+          <button
+            type="button"
+            onClick={() => setAmount(balance)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#6C5DD3] text-white px-3 py-1 rounded-lg text-sm font-medium"
+          >
+            max
+          </button>
+        </div>
+
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors"
+          >
+            Approve LP Token
+          </Button>
+          <Button
+            type="submit"
+            disabled={!amount || isStaking || Number(amount) <= 0 || Number(amount) > Number(balance)}
+            className="flex-1 bg-gray-200 text-gray-400 py-3 rounded-xl font-medium disabled:opacity-50"
+          >
+            {isStaking ? 'Staking...' : 'Stake LP Tokens'}
+          </Button>
+        </div>
       </form>
-    </Card>
+    </div>
   );
 }; 

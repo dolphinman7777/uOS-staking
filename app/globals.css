@@ -3,17 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 248, 250, 252;
-  --background-start-rgb: 15, 23, 42;
-  --background-end-rgb: 15, 23, 42;
+  --foreground-rgb: 118, 118, 118;
+  --background-rgb: 30, 33, 36;
+  --border-color: 152, 117, 84;
+  --glow-color: 64, 224, 208;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    rgb(var(--background-start-rgb)),
-    rgb(var(--background-end-rgb))
-  );
+  background: rgb(var(--background-rgb));
   min-height: 100vh;
+  font-family: 'Alliance', sans-serif;
+}
+
+@layer components {
+  .btn {
+    @apply px-3 py-1.5 md:px-4 md:py-2 rounded-md bg-white/95 text-gray-600 hover:text-gray-600 border border-gray-300;
+  }
+  
+  .logo-glow {
+    box-shadow: 0 0 45px rgba(var(--glow-color), 0.3),
+                0 0 30px rgba(var(--glow-color), 0.2);
+  }
+  
+  .planet-border {
+    @apply border border-[#987554]/20;
+  }
 } 

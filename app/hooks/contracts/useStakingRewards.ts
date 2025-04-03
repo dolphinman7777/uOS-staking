@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useAccount, useContractRead, useContractWrite, useWaitForTransaction } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useWatchContractEvent } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { CONTRACTS, STAKING_REWARDS_ABI } from '../../config/contracts';
 
@@ -10,83 +10,87 @@ export const useStakingRewards = () => {
   const [stakedBalance, setStakedBalance] = useState<string>('0');
   const [earnedRewards, setEarnedRewards] = useState<string>('0');
   const [totalStaked, setTotalStaked] = useState<string>('0');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Read contract data
-  const { data: stakedBalanceData } = useContractRead({
+  const { data: stakedBalanceData } = useReadContract({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
     functionName: 'getStakedBalance',
     args: address ? [address] : undefined,
-    watch: true,
-    enabled: !!address,
   });
 
-  const { data: earnedRewardsData } = useContractRead({
+  const { data: earnedRewardsData } = useReadContract({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
     functionName: 'getEarnedRewards',
     args: address ? [address] : undefined,
-    watch: true,
-    enabled: !!address,
   });
 
-  const { data: totalStakedData } = useContractRead({
+  const { data: totalStakedData } = useReadContract({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
     functionName: 'totalSupply',
-    watch: true,
   });
 
   // Write contract functions
-  const { write: stake, data: stakeData } = useContractWrite({
+  const { writeContract: stake, isPending: isStaking } = useWriteContract();
+  const { writeContract: withdraw, isPending: isWithdrawing } = useWriteContract();
+  const { writeContract: getReward, isPending: isClaiming } = useWriteContract();
+
+  // Watch for events
+  useWatchContractEvent({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
-    functionName: 'stake',
+    eventName: 'Staked',
+    onLogs: () => {
+      // Refresh data
+      setIsLoading(true);
+    },
   });
 
-  const { write: withdraw, data: withdrawData } = useContractWrite({
+  useWatchContractEvent({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
-    functionName: 'withdraw',
+    eventName: 'Withdrawn',
+    onLogs: () => {
+      // Refresh data
+      setIsLoading(true);
+    },
   });
 
-  const { write: getReward, data: getRewardData } = useContractWrite({
+  useWatchContractEvent({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
-    functionName: 'getReward',
-  });
-
-  // Wait for transactions
-  const { isLoading: isStaking } = useWaitForTransaction({
-    hash: stakeData?.hash,
-  });
-
-  const { isLoading: isWithdrawing } = useWaitForTransaction({
-    hash: withdrawData?.hash,
-  });
-
-  const { isLoading: isClaiming } = useWaitForTransaction({
-    hash: getRewardData?.hash,
+    eventName: 'RewardPaid',
+    onLogs: () => {
+      // Refresh data
+      setIsLoading(true);
+    },
   });
 
   // Update state when data changes
   useEffect(() => {
     if (stakedBalanceData) {
-      setStakedBalance(formatEther(stakedBalanceData));
+      setStakedBalance(formatEther(stakedBalanceData as bigint));
     }
     if (earnedRewardsData) {
-      setEarnedRewards(formatEther(earnedRewardsData));
+      setEarnedRewards(formatEther(earnedRewardsData as bigint));
     }
     if (totalStakedData) {
-      setTotalStaked(formatEther(totalStakedData));
+      setTotalStaked(formatEther(totalStakedData as bigint));
     }
+    setIsLoading(false);
   }, [stakedBalanceData, earnedRewardsData, totalStakedData]);
 
   // Transaction functions
   const handleStake = useCallback(
-    (amount: string) => {
+    async (amount: string) => {
       if (!amount) return;
-      stake({
+      await stake({
+        address: CONTRACTS.STAKING_REWARDS,
+        abi: STAKING_REWARDS_ABI,
+        functionName: 'stake',
         args: [parseEther(amount)],
       });
     },
@@ -94,17 +98,24 @@ export const useStakingRewards = () => {
   );
 
   const handleWithdraw = useCallback(
-    (amount: string) => {
+    async (amount: string) => {
       if (!amount) return;
-      withdraw({
+      await withdraw({
+        address: CONTRACTS.STAKING_REWARDS,
+        abi: STAKING_REWARDS_ABI,
+        functionName: 'withdraw',
         args: [parseEther(amount)],
       });
     },
     [withdraw]
   );
 
-  const handleClaim = useCallback(() => {
-    getReward();
+  const handleClaim = useCallback(async () => {
+    await getReward({
+      address: CONTRACTS.STAKING_REWARDS,
+      abi: STAKING_REWARDS_ABI,
+      functionName: 'getReward',
+    });
   }, [getReward]);
 
   return {
@@ -117,5 +128,6 @@ export const useStakingRewards = () => {
     isStaking,
     isWithdrawing,
     isClaiming,
+    isLoading,
   };
 }; 
