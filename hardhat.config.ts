@@ -4,6 +4,7 @@ require("@nomicfoundation/hardhat-network-helpers");
 require("@nomicfoundation/hardhat-chai-matchers");
 require("@nomicfoundation/hardhat-ethers");
 require("@nomicfoundation/hardhat-verify");
+require("@typechain/hardhat");
 require("dotenv/config");
 
 const config = {
@@ -26,6 +27,10 @@ const config = {
     apiKey: {
       base: process.env.BASESCAN_API_KEY || "",
     },
+  },
+  typechain: {
+    outDir: "typechain-types",
+    target: "ethers-v6",
   },
 };
 

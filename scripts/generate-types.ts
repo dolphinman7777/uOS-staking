@@ -1,24 +1,13 @@
-const { execSync } = require('child_process');
-const { resolve } = require('path');
+import { execSync } from 'child_process';
 
-async function main() {
-  try {
-    // Compile contracts
-    console.log('Compiling contracts...');
-    execSync('npx hardhat compile', { stdio: 'inherit' });
+console.log('Generating contract types...');
 
-    // Generate types
-    console.log('Generating types...');
-    execSync(
-      'npx typechain --target=ethers-v6 "artifacts/contracts/**/*.json" --out-dir typechain-types',
-      { stdio: 'inherit' }
-    );
-
-    console.log('Types generated successfully!');
-  } catch (error) {
-    console.error('Error generating types:', error);
-    process.exit(1);
-  }
-}
-
-main(); 
+try {
+  // Run hardhat compile to generate the typechain types
+  execSync('npx hardhat compile', { stdio: 'inherit' });
+  
+  console.log('Contract types generated successfully!');
+} catch (error) {
+  console.error('Error generating contract types:', error);
+  process.exit(1);
+} 

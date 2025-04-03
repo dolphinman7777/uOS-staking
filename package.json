@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "hardhat compile && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage",
     "compile": "hardhat compile",
     "deploy": "hardhat run scripts/deploy.ts --network base",
-    "verify": "hardhat run scripts/verify.ts --network base"
+    "verify": "hardhat run scripts/verify.ts --network base",
+    "generate-types": "hardhat typechain"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^1.3.0",
@@ -31,6 +32,8 @@
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@nomicfoundation/hardhat-verify": "^2.0.0",
     "@openzeppelin/contracts": "^4.9.3",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
