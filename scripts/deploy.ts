@@ -1,10 +1,10 @@
-import hre from "hardhat";
+import { ethers } from "hardhat";
 
 async function main() {
   console.log("Deploying StakingRewards contract...");
 
   // Get the contract factory
-  const StakingRewards = await hre.ethers.getContractFactory("StakingRewards");
+  const StakingRewards = await ethers.getContractFactory("StakingRewards");
 
   // Get the token addresses from environment variables or use placeholder addresses
   const stakingTokenAddress = process.env.LP_TOKEN_ADDRESS || "0x..."; // uOS-WETH LP token

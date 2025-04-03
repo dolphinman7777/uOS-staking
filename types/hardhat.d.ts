@@ -3,6 +3,10 @@ import { ethers } from "ethers";
 
 declare module "hardhat/types" {
   interface HardhatRuntimeEnvironment {
-    ethers: typeof ethers;
+    ethers: {
+      getContractFactory: (name: string) => Promise<any>;
+      provider: ethers.Provider;
+      signer: ethers.Signer;
+    };
   }
 } 
