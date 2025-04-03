@@ -1,0 +1,207 @@
+# Product Requirements Document: uOS LP Staking Dashboard
+
+## 1. Product Overview
+A minimalist, user-friendly dashboard for staking uOS-WETH LP tokens on Base network, using our own uOS design theme. Rewards are manually distributed from the treasury on a weekly or monthly basis.
+
+## 2. User Interface Components
+
+### 2.1 Stats Overview Section
+- Display two key metrics in cards:
+  - LP Tokens Staked: Total amount of uOS-WETH LP tokens staked
+  - APR: Current staking return rate (configurable by us)
+- uOS design theme (NOT using Aerodrome's theme)
+- Real-time metrics updates
+
+### 2.2 Staking Section
+Two main action panels:
+
+#### Stake Panel
+- Input field for LP token amount
+- Current wallet LP balance
+- "Approve LP" button (first-time)
+- "Stake" button
+
+#### Unstake Panel
+- Input field for staked LP amount
+- Display of currently staked amount
+- Display of claimable rewards
+- "Claim" button for rewards
+- "Unstake" button for LP tokens
+
+## 3. Technical Requirements
+
+### 3.1 Smart Contract Integration
+```typescript
+const CONTRACTS = {
+  UOS_TOKEN: "0x...", // uOS token address
+  LP_TOKEN: "0x...",  // uOS-WETH LP token
+  STAKING_REWARDS: "0x..." // StakingRewards contract
+}
+
+interface StakingRewards {
+  // View Functions
+  getStakedBalance(address: string): Promise<BigNumber>
+  getEarnedRewards(address: string): Promise<BigNumber>
+  
+  // Transaction Functions
+  approveLP(amount: BigNumber): Promise<Transaction>
+  stake(amount: BigNumber): Promise<Transaction>
+  withdraw(amount: BigNumber): Promise<Transaction>
+  claimRewards(): Promise<Transaction>
+  
+  // Events
+  onStaked(callback: (user: string, amount: BigNumber) => void): void
+  onWithdrawn(callback: (user: string, amount: BigNumber) => void): void
+  onRewardPaid(callback: (user: string, reward: BigNumber) => void): void
+}
+```
+
+### 3.2 Frontend Calculations
+- APR calculation based on:
+  - Total value of LP tokens staked
+  - Current reward rate
+  - Token prices from oracle/API
+
+### 3.3 Frontend Technology Stack
+- Next.js 14
+- TailwindCSS with uOS theme
+- ethers.js v6
+- wagmi for Web3
+- TypeScript
+
+## 4. Project Structure
+```
+uOS-finance/
+├── app/
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Header.tsx
+│   │   │   └── Footer.tsx
+│   │   ├── staking/
+│   │   │   ├── StakeCard.tsx
+│   │   │   ├── UnstakeCard.tsx
+│   │   │   └── StatsOverview.tsx
+│   │   └── shared/
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── Input.tsx
+│   │       └── ConnectButton.tsx
+│   ├── hooks/
+│   │   ├── contracts/
+│   │   │   ├── useStakingRewards.ts
+│   │   │   └── useTokenBalance.ts
+│   │   └── utils/
+│   │       └── useTransaction.ts
+│   ├── config/
+│   │   ├── contracts.ts
+│   │   ├── constants.ts
+│   │   └── rainbow.ts
+│   ├── providers/
+│   │   └── RainbowKit.tsx
+│   └── pages/
+│       ├── _app.tsx
+│       └── index.tsx
+├── contracts/
+│   ├── interfaces/
+│   │   └── IStakingRewards.sol
+│   ├── StakingRewards.sol
+│   └── test/
+│       └── StakingRewards.test.ts
+├── styles/
+│   ├── globals.css
+│   └── theme.ts
+├── scripts/
+│   ├── deploy.ts
+│   └── verify.ts
+├── hardhat.config.ts
+├── package.json
+└── README.md
+
+## 5. Key Files Implementation
+
+### 5.1 Smart Contract
+```solidity
+// contracts/StakingRewards.sol
+contract StakingRewards {
+    IERC20 public stakingToken;    // LP token
+    IERC20 public rewardsToken;    // UOS token
+    
+    uint256 public rewardRate;     // Rewards per second
+    uint256 public lastUpdateTime;
+    uint256 public rewardPerTokenStored;
+    
+    mapping(address => uint256) public balanceOf;
+    mapping(address => uint256) public userRewardPerTokenPaid;
+    mapping(address => uint256) public rewards;
+    
+    event RewardsDistributed(uint256 amount);
+    
+    constructor(
+        address _stakingToken,
+        address _rewardsToken
+    ) {
+        stakingToken = IERC20(_stakingToken);
+        rewardsToken = IERC20(_rewardsToken);
+    }
+    
+    function stake(uint256 amount) external {
+        // Implementation
+    }
+    
+    function withdraw(uint256 amount) external {
+        // Implementation
+    }
+    
+    function getReward() external {
+        // Implementation
+    }
+    
+    // Function to receive rewards from treasury (called manually)
+    function receiveRewards(uint256 amount) external {
+        // Transfer rewards from treasury
+        rewardsToken.transferFrom(msg.sender, address(this), amount);
+        emit RewardsDistributed(amount);
+    }
+}
+```
+
+### 5.2 Frontend Component
+```typescript
+// app/components/staking/StakeCard.tsx
+export const StakeCard: React.FC = () => {
+    const { stake, approve } = useStakingRewards()
+    const { balance } = useTokenBalance()
+    
+    return (
+        <Card>
+            <Input
+                label="Amount to Stake"
+                max={balance}
+                onChange={handleChange}
+            />
+            <Button onClick={handleStake}>
+                Stake LP
+            </Button>
+        </Card>
+    )
+}
+```
+
+## 6. Deployment Flow
+
+1. Deploy Contracts:
+```bash
+npx hardhat run scripts/deploy.ts --network base
+```
+
+2. Verify Contracts:
+```bash
+npx hardhat verify --network base [CONTRACT_ADDRESS]
+```
+
+3. Frontend Deployment:
+```bash
+vercel deploy
+```
+
+
