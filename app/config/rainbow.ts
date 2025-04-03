@@ -1,10 +1,23 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { CHAIN_ID } from './contracts';
+import { publicProvider } from 'wagmi/providers/public';
 
-export const config = getDefaultConfig({
+const { chains, publicClient } = configureChains(
+  [base],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
   appName: 'uOS Finance',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
-  chains: [base],
-  ssr: true,
-}); 
+  chains,
+});
+
+export const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
+
+export { chains }; 

@@ -2,7 +2,7 @@
 
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiConfig } from 'wagmi';
-import { wagmiConfig, chains } from '../config/wagmi';
+import { wagmiConfig, chains } from '../config/rainbow';
 import '@rainbow-me/rainbowkit/styles.css';
 
 export function RainbowKitProviders({ children }: { children: React.ReactNode }) {
