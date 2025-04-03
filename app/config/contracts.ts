@@ -13,9 +13,9 @@ if (!process.env.NEXT_PUBLIC_STAKING_REWARDS_ADDRESS) {
 }
 
 export const CONTRACTS = {
-  UOS_TOKEN: process.env.NEXT_PUBLIC_UOS_TOKEN_ADDRESS,
-  LP_TOKEN: process.env.NEXT_PUBLIC_LP_TOKEN_ADDRESS,
-  STAKING_REWARDS: process.env.NEXT_PUBLIC_STAKING_REWARDS_ADDRESS
+  UOS_TOKEN: process.env.NEXT_PUBLIC_UOS_TOKEN_ADDRESS as `0x${string}`,
+  LP_TOKEN: process.env.NEXT_PUBLIC_LP_TOKEN_ADDRESS as `0x${string}`,
+  STAKING_REWARDS: process.env.NEXT_PUBLIC_STAKING_REWARDS_ADDRESS as `0x${string}`
 } as const;
 
 export const STAKING_REWARDS_ABI = StakingRewards__factory.abi;
