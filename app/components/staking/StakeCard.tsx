@@ -1,17 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../shared/Card';
 import { Input } from '../shared/Input';
 import { Button } from '../shared/Button';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { CONTRACTS } from '@/config/contracts';
+import { useAccount } from 'wagmi';
 
 export const StakeCard = () => {
   const [amount, setAmount] = useState('');
+  const { address } = useAccount();
   const { balance } = useTokenBalance(CONTRACTS.LP_TOKEN);
-  const { handleStake, isStaking } = useStakingRewards();
+  const { handleStake, isStaking, isApproved, handleApprove, isApproving } = useStakingRewards();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,19 +65,24 @@ export const StakeCard = () => {
         </div>
 
         <div className="flex gap-4">
-          <Button
-            type="button"
-            className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors"
-          >
-            Approve LP Token
-          </Button>
-          <Button
-            type="submit"
-            disabled={!amount || isStaking || Number(amount) <= 0 || Number(amount) > Number(balance)}
-            className="flex-1 bg-gray-200 text-gray-400 py-3 rounded-xl font-medium disabled:opacity-50"
-          >
-            {isStaking ? 'Staking...' : 'Stake LP Tokens'}
-          </Button>
+          {!isApproved ? (
+            <Button
+              type="button"
+              onClick={handleApprove}
+              disabled={!amount || isApproving || !address}
+              className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
+            >
+              {isApproving ? 'Approving...' : 'Approve LP Token'}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              disabled={!amount || isStaking || Number(amount) <= 0 || Number(amount) > Number(balance)}
+              className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
+            >
+              {isStaking ? 'Staking...' : 'Stake LP Tokens'}
+            </Button>
+          )}
         </div>
       </form>
     </div>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWatchContractEvent } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { CONTRACTS, STAKING_REWARDS_ABI } from '../../config/contracts';
+import { useTokenAllowance } from './useTokenAllowance';
 
 export const useStakingRewards = () => {
   const { address } = useAccount();
@@ -37,6 +38,12 @@ export const useStakingRewards = () => {
   const { writeContract: stake, isPending: isStaking } = useWriteContract();
   const { writeContract: withdraw, isPending: isWithdrawing } = useWriteContract();
   const { writeContract: getReward, isPending: isClaiming } = useWriteContract();
+
+  // LP Token approval
+  const { allowance, approve, isApproving } = useTokenAllowance(
+    CONTRACTS.LP_TOKEN,
+    CONTRACTS.STAKING_REWARDS
+  );
 
   // Watch for events
   useWatchContractEvent({
@@ -118,6 +125,10 @@ export const useStakingRewards = () => {
     });
   }, [getReward]);
 
+  const handleApprove = useCallback(async () => {
+    await approve();
+  }, [approve]);
+
   return {
     stakedBalance,
     earnedRewards,
@@ -125,9 +136,12 @@ export const useStakingRewards = () => {
     handleStake,
     handleWithdraw,
     handleClaim,
+    handleApprove,
     isStaking,
     isWithdrawing,
     isClaiming,
+    isApproving,
+    isApproved: allowance > BigInt(0),
     isLoading,
   };
 }; 
