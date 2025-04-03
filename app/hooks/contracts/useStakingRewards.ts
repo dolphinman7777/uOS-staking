@@ -16,16 +16,18 @@ export const useStakingRewards = () => {
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
     functionName: 'getStakedBalance',
-    args: [address],
+    args: address ? [address] : undefined,
     watch: true,
+    enabled: !!address,
   });
 
   const { data: earnedRewardsData } = useContractRead({
     address: CONTRACTS.STAKING_REWARDS,
     abi: STAKING_REWARDS_ABI,
     functionName: 'getEarnedRewards',
-    args: [address],
+    args: address ? [address] : undefined,
     watch: true,
+    enabled: !!address,
   });
 
   const { data: totalStakedData } = useContractRead({
