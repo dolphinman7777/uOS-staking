@@ -10,9 +10,9 @@ export const UnstakeCard = () => {
   const [amount, setAmount] = useState('');
   const { 
     stakedBalance, 
-    earnedRewards,
+    earned,
     handleWithdraw, 
-    handleClaim,
+    handleGetReward,
     isWithdrawing,
     isClaiming 
   } = useStakingRewards();
@@ -38,7 +38,7 @@ export const UnstakeCard = () => {
 
         <div className="bg-[#F7F5FF] rounded-xl p-4">
           <div className="text-4xl font-semibold text-[#6C5DD3] mb-2">
-            {Number(earnedRewards).toLocaleString(undefined, {
+            {Number(earned).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -71,8 +71,8 @@ export const UnstakeCard = () => {
 
         <div className="flex gap-4">
           <Button
-            onClick={handleClaim}
-            disabled={!earnedRewards || isClaiming}
+            onClick={handleGetReward}
+            disabled={!earned || isClaiming}
             className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
           >
             {isClaiming ? 'Claiming...' : 'Claim Rewards'}
