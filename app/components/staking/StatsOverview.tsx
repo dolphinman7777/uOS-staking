@@ -6,7 +6,7 @@ import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
 import { useStakingAPR } from '@/hooks/contracts/useStakingAPR';
 
 export const StatsOverview = () => {
-  const { totalStaked, earnedRewards } = useStakingRewards();
+  const { totalLPInStaking, earned } = useStakingRewards();
   const { apr, isLoading: isLoadingAPR } = useStakingAPR();
 
   return (
@@ -14,7 +14,7 @@ export const StatsOverview = () => {
       <div className="bg-[rgb(247,247,247)] rounded-lg p-6 shadow-sm">
         <h3 className="text-lg font-semibold text-[#6C5DD3]">Total LP Tokens Staked</h3>
         <p className="text-3xl font-bold text-[#6C5DD3] mt-2">
-          {Number(totalStaked).toLocaleString(undefined, {
+          {Number(totalLPInStaking).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
@@ -24,7 +24,7 @@ export const StatsOverview = () => {
       <div className="bg-[rgb(247,247,247)] rounded-lg p-6 shadow-sm">
         <h3 className="text-lg font-semibold text-[#6C5DD3]">Your Earned Rewards</h3>
         <p className="text-3xl font-bold text-[#6C5DD3] mt-2">
-          {Number(earnedRewards).toLocaleString(undefined, {
+          {Number(earned).toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
