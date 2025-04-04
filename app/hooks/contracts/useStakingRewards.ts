@@ -16,6 +16,14 @@ export const useStakingRewards = () => {
     args: [CONTRACTS.STAKING_REWARDS]
   });
 
+  // Check allowance for approval status
+  const { data: allowance } = useReadContract({
+    address: CONTRACTS.LP_TOKEN,
+    abi: ERC20_ABI,
+    functionName: 'allowance',
+    args: connected_address && CONTRACTS.STAKING_REWARDS ? [connected_address, CONTRACTS.STAKING_REWARDS] : undefined
+  });
+
   // 2. stakingrewards.getReward(connected_address) - This is a write function, not needed here
 
   // 3. TBA
@@ -111,5 +119,8 @@ export const useStakingRewards = () => {
     isStaking: isStakingTx,
     isWithdrawing: isStakingTx,
     isClaiming: isStakingTx,
+
+    // Approval state
+    isApproved: allowance ? (allowance as bigint) > BigInt(0) : false,
   };
 }; 
