@@ -3,8 +3,8 @@ import { RainbowKitProviders } from './providers/RainbowKit';
 import { ToastProvider } from './providers/ToastProvider';
 import BottomNavigation from './components/BottomNavigation';
 import Header from './components/Header';
-import './styles/fonts.css';
 import './globals.css';
+import './styles/fonts.css';
 
 export const metadata: Metadata = {
   title: 'uOS LP Staking',
@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <RainbowKitProviders>
           <ToastProvider>
             <Header />

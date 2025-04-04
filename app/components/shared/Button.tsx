@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export const Button = ({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   variant = 'primary',
   size = 'md',
@@ -17,7 +17,7 @@ export const Button = ({
   disabled,
   className = '',
   ...props
-}: ButtonProps) => {
+}, ref) => {
   const baseStyles = 'rounded-lg font-medium transition-colors duration-200';
   const sizeStyles = {
     sm: 'px-2 py-1 text-sm',
@@ -25,13 +25,16 @@ export const Button = ({
     lg: 'px-6 py-3 text-lg',
   };
   const variantStyles = {
-    primary: 'bg-primary text-white hover:bg-primary/90 disabled:bg-primary/50',
+    primary: 'bg-primary text-black hover:bg-primary/90 disabled:bg-primary/50',
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 disabled:bg-gray-100/50',
   };
 
+  const buttonClassName = twMerge(baseStyles, sizeStyles[size], variantStyles[variant], className);
+
   return (
     <button
-      className={twMerge(baseStyles, sizeStyles[size], variantStyles[variant], className)}
+      ref={ref}
+      className={buttonClassName}
       disabled={disabled || isLoading}
       {...props}
     >
@@ -44,4 +47,4 @@ export const Button = ({
       )}
     </button>
   );
-}; 
+}); 

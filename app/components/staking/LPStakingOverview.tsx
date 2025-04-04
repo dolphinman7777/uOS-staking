@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAccount } from 'wagmi';
 import { Card } from '@/components/shared/Card';
 import { Button } from '@/components/shared/Button';
@@ -14,6 +14,19 @@ export const LPStakingOverview = () => {
   const { showToast } = useToast();
   const [stakeAmount, setStakeAmount] = useState('');
   const [unstakeAmount, setUnstakeAmount] = useState('');
+  const lpButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (lpButtonRef.current) {
+      const button = lpButtonRef.current;
+      const styles = window.getComputedStyle(button);
+      console.log('LP Button computed styles:', {
+        color: styles.color,
+        backgroundColor: styles.backgroundColor,
+        // Add any other properties you want to check
+      });
+    }
+  }, []);
 
   const {
     stakedBalance,
@@ -147,10 +160,13 @@ export const LPStakingOverview = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Button 
+                ref={lpButtonRef}
                 variant="primary"
                 onClick={handleStakeSubmit}
                 isLoading={isStaking}
                 disabled={!stakeAmount || isStaking || !address}
+                style={{ color: 'black' }}
+                className="lp-token-button-text"
               >
                 {!address ? 'Connect Wallet' : 'Approve LP Token'}
               </Button>
