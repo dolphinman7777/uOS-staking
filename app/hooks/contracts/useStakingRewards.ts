@@ -49,8 +49,8 @@ export const useStakingRewards = () => {
   });
 
   // Write contract functions
-  const { writeContract: writeUniv2 } = useWriteContract();
-  const { writeContract: writeStakingRewards } = useWriteContract();
+  const { writeContract: writeUniv2, isPending: isApproving } = useWriteContract();
+  const { writeContract: writeStakingRewards, isPending: isStakingTx } = useWriteContract();
 
   // 8. univ2.approve(stakingrewards_address, uint256.max)
   const handleApprove = useCallback(async () => {
@@ -105,5 +105,11 @@ export const useStakingRewards = () => {
     handleStake,
     handleGetReward,
     handleWithdraw,
+
+    // Loading states
+    isApproving,
+    isStaking: isStakingTx,
+    isWithdrawing: isStakingTx,
+    isClaiming: isStakingTx,
   };
 }; 

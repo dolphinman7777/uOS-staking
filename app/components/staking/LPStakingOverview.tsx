@@ -30,11 +30,12 @@ export const LPStakingOverview = () => {
 
   const {
     stakedBalance,
-    earnedRewards,
-    totalStaked,
+    earned,
+    totalLPInStaking,
     handleStake,
     handleWithdraw,
-    handleClaim,
+    handleGetReward,
+    handleApprove,
     isStaking,
     isWithdrawing,
     isClaiming,
@@ -79,7 +80,7 @@ export const LPStakingOverview = () => {
 
   const handleClaimSubmit = async () => {
     try {
-      await handleClaim();
+      await handleGetReward();
       showToast('Successfully claimed rewards', 'success');
     } catch (error) {
       showToast(
@@ -107,12 +108,12 @@ export const LPStakingOverview = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-6">
           <h3 className="text-sm font-medium text-gray-600 mb-2">Total LP Tokens Staked</h3>
-          <p className="text-3xl font-medium text-gray-900">{totalStaked}</p>
+          <p className="text-3xl font-medium text-gray-900">{totalLPInStaking}</p>
         </Card>
 
         <Card className="p-6">
           <h3 className="text-sm font-medium text-gray-600 mb-2">Your Earned Rewards</h3>
-          <p className="text-3xl font-medium text-gray-900">{earnedRewards}</p>
+          <p className="text-3xl font-medium text-gray-900">{earned}</p>
         </Card>
 
         <Card className="p-6">
@@ -162,9 +163,8 @@ export const LPStakingOverview = () => {
               <Button 
                 ref={lpButtonRef}
                 variant="primary"
-                onClick={handleStakeSubmit}
-                isLoading={isStaking}
-                disabled={!stakeAmount || isStaking || !address}
+                onClick={handleApprove}
+                disabled={!stakeAmount || !address}
                 style={{ color: 'black' }}
                 className="lp-token-button-text"
               >
@@ -193,7 +193,7 @@ export const LPStakingOverview = () => {
               </div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-2xl font-medium text-gray-900">{earnedRewards}</p>
+              <p className="text-2xl font-medium text-gray-900">{earned}</p>
               <div className="text-sm text-gray-500">
                 <p>Claimable Rewards</p>
                 <p>LP Token</p>
@@ -219,7 +219,7 @@ export const LPStakingOverview = () => {
                 variant="primary"
                 onClick={handleClaimSubmit}
                 isLoading={isClaiming}
-                disabled={Number(earnedRewards) === 0 || isClaiming || !address}
+                disabled={Number(earned) === 0 || isClaiming || !address}
               >
                 {!address ? 'Connect Wallet' : 'Claim Rewards'}
               </Button>
