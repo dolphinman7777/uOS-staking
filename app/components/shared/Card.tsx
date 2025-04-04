@@ -10,7 +10,7 @@ interface CardProps {
 
 export const Card = ({ children, className = '' }: CardProps) => {
   return (
-    <div className={`rounded-lg bg-white shadow-sm ${className}`}>
+    <div style={{ backgroundColor: 'rgb(247, 247, 247)' }} className={`rounded-lg shadow-sm ${className}`}>
       {children}
     </div>
   );

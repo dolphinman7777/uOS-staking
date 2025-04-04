@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { RainbowKitProviders } from './providers/RainbowKit';
 import { ToastProvider } from './providers/ToastProvider';
 import BottomNavigation from './components/BottomNavigation';
+import Header from './components/Header';
 import './styles/fonts.css';
 import './globals.css';
 
@@ -20,7 +21,10 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-foreground">
         <RainbowKitProviders>
           <ToastProvider>
-            {children}
+            <Header />
+            <main className="pt-16">
+              {children}
+            </main>
             <BottomNavigation />
           </ToastProvider>
         </RainbowKitProviders>

@@ -1,4 +1,5 @@
 @import './styles/fonts.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,11 +7,11 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 97%;
     --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
+    --card: 0 0% 97%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 97%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -50,6 +51,11 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
+  body {
+    @apply bg-background text-white;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
   * {
     @apply border-border;
   }
@@ -64,6 +70,18 @@
 @layer components {
   .btn {
     @apply px-3 py-1.5 md:px-4 md:py-2 rounded-md bg-white/95 text-gray-600 hover:text-gray-600 border border-gray-300;
+  }
+
+  .input {
+    @apply bg-transparent border-[1px] border-white/10 rounded-lg px-4 py-2 text-white placeholder:text-white/50 focus:border-white/30 transition-colors;
+  }
+
+  .button {
+    @apply bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-colors;
+  }
+
+  .button-primary {
+    @apply bg-accent text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors;
   }
 }
 
@@ -98,4 +116,12 @@
 
 .animate-typing {
   animation: typing 0.05s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.monospace {
+  font-family: monospace;
 } 

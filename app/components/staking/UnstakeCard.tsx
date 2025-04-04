@@ -24,7 +24,7 @@ export const UnstakeCard = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-lg">
+    <div className="bg-[rgb(247,247,247)] rounded-2xl p-8 shadow-lg">
       <h2 className="text-2xl font-semibold text-[#6C5DD3] mb-8">Unstake</h2>
       
       <div className="grid grid-cols-2 gap-6 mb-8">
@@ -58,7 +58,7 @@ export const UnstakeCard = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount of LP Token to unstake"
-            className="w-full pl-28 pr-20 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5DD3]/20"
+            className="w-full pl-28 pr-20 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6C5DD3]/20 bg-[#f7f7f7]"
           />
           <button
             type="button"

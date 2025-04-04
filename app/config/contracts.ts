@@ -1,4 +1,4 @@
-import { StakingRewards__factory } from '../../typechain-types';
+// Remove the import from typechain-types
 
 // Validate environment variables
 if (!process.env.NEXT_PUBLIC_UOS_TOKEN_ADDRESS) {
@@ -102,14 +102,14 @@ export const STAKING_REWARDS_ABI = [
   // View Functions
   {
     inputs: [{ name: "account", type: "address" }],
-    name: "getStakedBalance",
+    name: "balanceOf",
     outputs: [{ name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [{ name: "account", type: "address" }],
-    name: "getEarnedRewards",
+    name: "earned",
     outputs: [{ name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
@@ -135,6 +135,27 @@ export const STAKING_REWARDS_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [],
+    name: "getRewardForDuration",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lastTimeRewardApplicable",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rewardPerToken",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
   // Transaction Functions
   {
     inputs: [{ name: "amount", type: "uint256" }],
@@ -153,6 +174,13 @@ export const STAKING_REWARDS_ABI = [
   {
     inputs: [],
     name: "getReward",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "exit",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -185,6 +213,18 @@ export const STAKING_REWARDS_ABI = [
     name: "RewardPaid",
     type: "event",
   },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, name: "reward", type: "uint256" }],
+    name: "RewardAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, name: "newDuration", type: "uint256" }],
+    name: "RewardsDurationUpdated",
+    type: "event",
+  },
 ] as const;
 
-export const CHAIN_ID = 8453; // Base network 
+export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 8453; // Default to Base network if not specified 
