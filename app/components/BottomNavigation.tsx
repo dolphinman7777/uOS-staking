@@ -13,7 +13,7 @@ export default function BottomNavigation() {
   return (
     <div className="fixed bottom-6 left-6 z-50 flex gap-2">
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-0.5 md:gap-1 hover:text-gray-600 transition-colors bg-white/95 rounded-full shadow-lg px-3 py-1.5">
+        <DropdownMenuTrigger className="flex items-center gap-0.5 md:gap-1 hover:text-gray-300 transition-colors bg-black text-white rounded-full shadow-lg px-3 py-1.5">
           Community
           <ChevronDown className="w-3 h-3 md:w-4 md:h-4" />
         </DropdownMenuTrigger>
@@ -92,7 +92,7 @@ export default function BottomNavigation() {
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-0.5 md:gap-1 hover:text-gray-600 transition-colors bg-white/95 rounded-full shadow-lg px-3 py-1.5">
+        <DropdownMenuTrigger className="flex items-center gap-0.5 md:gap-1 hover:text-gray-300 transition-colors bg-black text-white rounded-full shadow-lg px-3 py-1.5">
           $uOS
           <ChevronDown className="w-3 h-3 md:w-4 md:h-4" />
         </DropdownMenuTrigger>
