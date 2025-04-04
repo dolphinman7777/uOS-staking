@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "hardhat compile && next build",
+    "build": "next build",
+    "build:contracts": "hardhat compile && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "hardhat test",
