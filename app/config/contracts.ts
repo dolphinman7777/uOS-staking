@@ -227,4 +227,4 @@ export const STAKING_REWARDS_ABI = [
   },
 ] as const;
 
-export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 8453; // Default to Base network if not specified 
+export const CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) : 11155111; // Sepolia chain ID 
