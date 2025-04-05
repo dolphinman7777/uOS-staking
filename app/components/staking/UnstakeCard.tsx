@@ -51,12 +51,12 @@ export const UnstakeCard = () => {
   };
 
   return (
-    <div className="bg-[#e5e5e5] rounded-2xl p-8 noise">
-      <h2 className="text-2xl font-semibold text-[#4a5568] mb-8">Unstake</h2>
+    <div className="bg-[#e5e5e5] rounded-2xl p-4 md:p-8 noise">
+      <h2 className="text-xl md:text-2xl font-semibold text-[#4a5568] mb-6 md:mb-8">Unstake</h2>
       
-      <div className="grid grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="bg-[#d8d8d8] rounded-xl p-4 noise">
-          <div className="text-4xl font-semibold text-[#4a5568] mb-2">
+          <div className="text-2xl md:text-4xl font-semibold text-[#4a5568] mb-2">
             {Number(stakedBalance).toLocaleString()}
           </div>
           <div className="text-sm text-[#64748b]">Staked</div>
@@ -64,7 +64,7 @@ export const UnstakeCard = () => {
         </div>
 
         <div className="bg-[#d8d8d8] rounded-xl p-4 noise">
-          <div className="text-4xl font-semibold text-[#4a5568] mb-2">
+          <div className="text-2xl md:text-4xl font-semibold text-[#4a5568] mb-2">
             {Number(earned).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -77,7 +77,7 @@ export const UnstakeCard = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#d8d8d8] px-4 py-2 rounded-lg text-sm font-medium text-[#4a5568]">
+          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 bg-[#d8d8d8] px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium text-[#4a5568]">
             LP Token
           </div>
           <input
@@ -85,12 +85,12 @@ export const UnstakeCard = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount of LP Token to unstake"
-            className="w-full pl-28 pr-20 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9e9e9e]/20 bg-[#d8d8d8]"
+            className="w-full pl-20 md:pl-28 pr-16 md:pr-20 py-3 md:py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a5568]/20 bg-[#d8d8d8] text-sm md:text-base"
           />
           <button
             type="button"
             onClick={() => setAmount(stakedBalance)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#9e9e9e] text-white px-3 py-1 rounded-lg text-sm font-medium"
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-[#4a5568] text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm font-medium"
           >
             max
           </button>
