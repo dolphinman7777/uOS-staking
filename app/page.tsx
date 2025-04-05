@@ -9,10 +9,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-text">uOS LP Staking</h1>
-        </div>
-
         <div className="space-y-8">
           <StatsOverview />
           

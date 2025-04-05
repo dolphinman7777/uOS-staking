@@ -105,21 +105,21 @@ export const LPStakingOverview = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-6 mb-6">
         <Card className="p-6">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Total LP Tokens Staked</h3>
-          <p className="text-3xl font-medium text-gray-900">{totalLPInStaking}</p>
+          <h3 className="text-lg font-medium text-purple-600">Total LP Tokens Staked</h3>
+          <p className="text-2xl font-medium text-gray-900 mt-2">{totalLPInStaking}</p>
         </Card>
 
         <Card className="p-6">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Your Earned Rewards</h3>
-          <p className="text-3xl font-medium text-gray-900">{earned}</p>
+          <h3 className="text-lg font-medium text-purple-600">Your Earned Rewards</h3>
+          <p className="text-2xl font-medium text-gray-900 mt-2">{earned}</p>
         </Card>
 
         <Card className="p-6">
-          <h3 className="text-sm font-medium text-gray-600 mb-2">Current APR</h3>
-          <p className="text-3xl font-medium text-gray-400">
-            {isLoadingAPR ? 'Loading...' : `${apr}%`}
+          <h3 className="text-lg font-medium text-purple-600">Current APR</h3>
+          <p className="text-2xl font-medium text-gray-900 mt-2">
+            {isLoadingAPR ? 'Loading...' : `${Number(apr).toFixed(2)}%`}
           </p>
         </Card>
       </div>
