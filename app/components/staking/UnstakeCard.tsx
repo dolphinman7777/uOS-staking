@@ -5,22 +5,49 @@ import { Card } from '../shared/Card';
 import { Input } from '../shared/Input';
 import { Button } from '../shared/Button';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
+import { useToast } from '@/providers/ToastProvider';
 
 export const UnstakeCard = () => {
   const [amount, setAmount] = useState('');
+  const { showToast } = useToast();
   const { 
     stakedBalance, 
     earned,
     handleWithdraw, 
     handleGetReward,
     isWithdrawing,
-    isClaiming 
+    isClaiming,
+    refetch: refetchStaking
   } = useStakingRewards();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount) return;
-    handleWithdraw(amount);
+    
+    try {
+      await handleWithdraw(amount);
+      showToast('Successfully unstaked LP tokens', 'success');
+      setAmount(''); // Reset amount after successful unstake
+      await refetchStaking(); // Refetch all staking data
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to unstake LP tokens',
+        'error'
+      );
+    }
+  };
+
+  const handleClaimRewards = async () => {
+    try {
+      await handleGetReward();
+      showToast('Successfully claimed rewards', 'success');
+      await refetchStaking(); // Refetch all staking data
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to claim rewards',
+        'error'
+      );
+    }
   };
 
   return (
@@ -71,7 +98,8 @@ export const UnstakeCard = () => {
 
         <div className="flex gap-4">
           <Button
-            onClick={handleGetReward}
+            type="button"
+            onClick={handleClaimRewards}
             disabled={!earned || isClaiming}
             className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
           >

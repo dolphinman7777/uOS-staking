@@ -8,17 +8,53 @@ import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { CONTRACTS } from '@/config/contracts';
 import { useAccount } from 'wagmi';
+import { useToast } from '@/providers/ToastProvider';
 
 export const StakeCard = () => {
   const [amount, setAmount] = useState('');
   const { address } = useAccount();
-  const { balance } = useTokenBalance(CONTRACTS.LP_TOKEN);
-  const { handleStake, isStaking, isApproved, handleApprove, isApproving } = useStakingRewards();
+  const { showToast } = useToast();
+  const { balance, refetch: refetchBalance } = useTokenBalance(CONTRACTS.LP_TOKEN);
+  const { 
+    handleStake, 
+    isStaking, 
+    isApproved, 
+    handleApprove, 
+    isApproving,
+    refetch: refetchStaking
+  } = useStakingRewards();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount) return;
-    handleStake(amount);
+    
+    try {
+      await handleStake(amount);
+      showToast('Successfully staked LP tokens', 'success');
+      setAmount(''); // Reset amount after successful stake
+      // Refetch all relevant data
+      await Promise.all([
+        refetchBalance(),
+        refetchStaking()
+      ]);
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to stake LP tokens',
+        'error'
+      );
+    }
+  };
+
+  const handleApproveClick = async () => {
+    try {
+      await handleApprove();
+      showToast('Successfully approved LP tokens', 'success');
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : 'Failed to approve LP tokens',
+        'error'
+      );
+    }
   };
 
   return (
@@ -68,7 +104,7 @@ export const StakeCard = () => {
           {!isApproved ? (
             <Button
               type="button"
-              onClick={handleApprove}
+              onClick={handleApproveClick}
               disabled={!amount || isApproving || !address}
               className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
             >

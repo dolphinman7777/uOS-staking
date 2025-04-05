@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi';
 import { formatEther, parseEther } from 'viem';
 import { CONTRACTS } from '@/config/contracts';
+import { useQueryClient } from '@tanstack/react-query';
 
 const IERC20_ABI = [
   {
@@ -61,9 +62,10 @@ const IERC20_ABI = [
 
 export const useTokenBalance = (tokenAddress: string) => {
   const { address } = useAccount();
+  const queryClient = useQueryClient();
   const [balance, setBalance] = useState<string>('0');
 
-  const { data: balanceData } = useReadContract({
+  const { data: balanceData, refetch } = useReadContract({
     address: tokenAddress as `0x${string}`,
     abi: IERC20_ABI,
     functionName: 'balanceOf',
@@ -73,12 +75,20 @@ export const useTokenBalance = (tokenAddress: string) => {
   const { writeContract: approve, isPending: isApproving } = useWriteContract();
 
   const handleApprove = async (spender: string, amount: string) => {
-    await approve({
-      address: tokenAddress as `0x${string}`,
-      abi: IERC20_ABI,
-      functionName: 'approve',
-      args: [spender as `0x${string}`, parseEther(amount)],
-    });
+    try {
+      await approve({
+        address: tokenAddress as `0x${string}`,
+        abi: IERC20_ABI,
+        functionName: 'approve',
+        args: [spender as `0x${string}`, parseEther(amount)],
+      });
+      await refetch();
+      // Invalidate related queries
+      await queryClient.invalidateQueries({ queryKey: ['tokenBalance', address, tokenAddress] });
+    } catch (error) {
+      console.error('Token approval failed:', error);
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -87,5 +97,14 @@ export const useTokenBalance = (tokenAddress: string) => {
     }
   }, [balanceData]);
 
-  return { balance, handleApprove, isApproving };
+  // Add refetch to interval to keep balance updated
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000); // Refresh every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [refetch]);
+
+  return { balance, handleApprove, isApproving, refetch };
 }; 
