@@ -8,7 +8,7 @@ import './styles/fonts.css';
 
 export const metadata: Metadata = {
   title: 'uOS Aerodrome V2 LP Staking',
-  description: 'Stake uOS and ETH, earn uOS rewards.',
+  description: 'Stake uOS/ETH liquidity tokens, earn $uOS rewards',
 };
 
 export default function RootLayout({

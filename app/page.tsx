@@ -11,7 +11,7 @@ export default function Home() {
       <div className="mx-auto max-w-6xl">
         <div className="h-screen flex flex-col justify-center">
           <h1 className="text-5xl font-normal text-white mb-4">uOS Aerodrome V2 LP Staking</h1>
-          <p className="text-xl text-gray-400">Stake uOS and ETH, earn uOS rewards.</p>
+          <p className="text-xl text-gray-400">Stake uOS/ETH liquidity tokens, earn $uOS rewards</p>
           <p className="text-sm font-mono text-gray-500 mt-8">—a new age of decentralized finance is born.</p>
         </div>
 
