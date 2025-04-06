@@ -125,7 +125,28 @@ export default function BottomNavigation() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex gap-2 justify-center md:justify-end">
+          
+          {/* uOS Website Links - Middle */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 mt-2 md:mt-0 text-xs md:text-sm text-gray-400">
+            <Link 
+              href="https://www.uos.agency/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors flex items-center gap-1"
+            >
+              uos.agency <ArrowUpRight className="w-3 h-3" />
+            </Link>
+            <Link 
+              href="https://www.uos.earth/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors flex items-center gap-1"
+            >
+              uos.earth <ArrowUpRight className="w-3 h-3" />
+            </Link>
+          </div>
+          
+          <div className="flex gap-2 justify-center md:justify-end mt-2 md:mt-0">
             <Link
               href="https://universal-operating-system.gitbook.io/universal-operating-system"
               className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm md:text-base"
