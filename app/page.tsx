@@ -4,6 +4,7 @@ import React from 'react';
 import { StatsOverview } from './components/staking/StatsOverview';
 import { StakeCard } from './components/staking/StakeCard';
 import { UnstakeCard } from './components/staking/UnstakeCard';
+import { TypewriterEffect } from './components/TypewriterEffect';
 import Link from 'next/link';
 
 export default function Home() {
@@ -13,7 +14,12 @@ export default function Home() {
         <div className="h-screen flex flex-col justify-center">
           <h1 className="text-5xl font-normal text-white mb-4">uOS Aerodrome V2 LP Staking</h1>
           <p className="text-xl text-gray-400">Stake uOS/ETH liquidity tokens, earn <span className="bg-gradient-to-r from-green-700 via-green-300 to-green-700 text-transparent bg-clip-text font-semibold animate-pulse">$uOS</span> rewards</p>
-          <p className="text-sm font-mono text-gray-500 mt-8 mb-8">—a new age of decentralized finance is born.</p>
+          <p className="text-sm font-mono text-gray-500 mt-8 mb-8">
+            <TypewriterEffect 
+              text="—a new age of decentralized finance is born." 
+              delay={40} 
+            />
+          </p>
           
           <Link 
             href="https://aerodrome.finance/deposit?token0=0x4200000000000000000000000000000000000006&token1=0xbE8728795b935bf6E2a9253Ce7a2Ef6fA831f51E&type=-1&chain=8453&factory=0x420DD381b31aEf6683db6B902084cB0FFECe40Da"
