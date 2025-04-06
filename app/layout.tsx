@@ -9,6 +9,10 @@ import './styles/fonts.css';
 export const metadata: Metadata = {
   title: 'uOS Aerodrome V2 LP Staking',
   description: 'Stake uOS/ETH liquidity tokens, earn $uOS rewards',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.png'
+  }
 };
 
 export default function RootLayout({
@@ -18,6 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+      </head>
       <body className="min-h-screen bg-[#121212] text-foreground antialiased">
         <RainbowKitProviders>
           <ToastProvider>
