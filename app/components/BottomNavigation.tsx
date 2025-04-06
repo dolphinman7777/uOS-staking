@@ -146,26 +146,49 @@ export default function BottomNavigation() {
             </Link>
           </div>
           
-          <div className="flex gap-2 justify-center md:justify-end mt-2 md:mt-0">
+          {/* Desktop Docs and Github - Only show on desktop */}
+          <div className="hidden md:flex gap-2 justify-end">
             <Link
               href="https://universal-operating-system.gitbook.io/universal-operating-system"
-              className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm md:text-base"
+              className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
+              <ArrowUpRight className="w-4 h-4" />
               Docs
             </Link>
             <Link
               href="https://github.com/dolphinman7777"
-              className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm md:text-base"
+              className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
+              <ArrowUpRight className="w-4 h-4" />
               Github
             </Link>
           </div>
+        </div>
+        
+        {/* Mobile Docs and Github - Bottom Row */}
+        <div className="flex justify-between mt-3 md:hidden">
+          <Link
+            href="https://universal-operating-system.gitbook.io/universal-operating-system"
+            className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-xs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ArrowUpRight className="w-3 h-3" />
+            Docs
+          </Link>
+          <Link
+            href="https://github.com/dolphinman7777"
+            className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-xs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ArrowUpRight className="w-3 h-3" />
+            Github
+          </Link>
         </div>
       </div>
     </div>
