@@ -9,6 +9,34 @@ import './styles/fonts.css';
 export const metadata: Metadata = {
   title: 'uOS Aerodrome V2 LP Staking',
   description: 'Stake uOS/ETH liquidity tokens, earn $uOS rewards',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: '/favicon.png',
+        sizes: '16x16',
+        type: 'image/png',
+      }
+    ],
+    apple: [
+      {
+        url: '/favicon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      }
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/favicon.png',
+      }
+    ]
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -18,6 +46,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+        <meta name="theme-color" content="#121212" />
+      </head>
       <body className="min-h-screen bg-[#121212] text-foreground antialiased">
         <RainbowKitProviders>
           <ToastProvider>

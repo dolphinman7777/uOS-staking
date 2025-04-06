@@ -1,0 +1,21 @@
+{
+  "name": "uOS Aerodrome V2 LP Staking",
+  "short_name": "uOS Staking",
+  "description": "Stake uOS/ETH liquidity tokens, earn $uOS rewards",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 
