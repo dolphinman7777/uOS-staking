@@ -102,17 +102,6 @@ export default function BottomNavigation() {
               <DropdownMenuContent align="start" className="w-[200px] md:w-[240px]">
                 <DropdownMenuItem asChild>
                   <Link
-                    href="https://dexscreener.com/solana/7xhhhvbtzwqqnyqubkbmu8t6cjoqmguzcgd2xku2sdst"
-                    className="flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ArrowUpRight className="w-4 h-4" />
-                    SOL
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
                     href="https://aerodrome.finance/swap?from=eth&to=0xbe8728795b935bf6e2a9253ce7a2ef6fa831f51e&chain0=8453&chain1=8453"
                     className="flex items-center gap-2"
                     target="_blank"
