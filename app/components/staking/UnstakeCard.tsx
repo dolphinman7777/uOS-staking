@@ -20,7 +20,7 @@ export const UnstakeCard = () => {
     handleGetReward,
     isWithdrawing,
     isClaiming,
-    refetch: refetchStaking
+    refetchAllData
   } = useStakingRewards();
 
   // Watch for withdraw transaction confirmation
@@ -37,13 +37,25 @@ export const UnstakeCard = () => {
       confirmations: 1
     });
     
+  // Auto refresh data on a timer
+  useEffect(() => {
+    // Initial fetch
+    refetchAllData();
+    
+    const intervalId = setInterval(() => {
+      refetchAllData();
+    }, 5000); // Refresh every 5 seconds
+    
+    return () => clearInterval(intervalId);
+  }, [refetchAllData]);
+  
   // When withdraw transaction is confirmed, show success toast and refresh data
   useEffect(() => {
     if (withdrawTxConfirmed && withdrawTxHash) {
       const updateDataAndNotify = async () => {
         try {
-          // Refresh data
-          await refetchStaking();
+          // Force refresh all data
+          await refetchAllData();
           
           // Show success notification after data is refreshed
           showToast('Successfully unstaked LP tokens!', 'success');
@@ -57,15 +69,15 @@ export const UnstakeCard = () => {
       
       updateDataAndNotify();
     }
-  }, [withdrawTxConfirmed, withdrawTxHash, refetchStaking, showToast]);
+  }, [withdrawTxConfirmed, withdrawTxHash, refetchAllData, showToast]);
   
   // When claim transaction is confirmed, show success toast and refresh data
   useEffect(() => {
     if (claimTxConfirmed && claimTxHash) {
       const updateDataAndNotify = async () => {
         try {
-          // Refresh data
-          await refetchStaking();
+          // Force refresh all data
+          await refetchAllData();
           
           // Show success notification after data is refreshed
           showToast('Successfully claimed rewards!', 'success');
@@ -79,7 +91,7 @@ export const UnstakeCard = () => {
       
       updateDataAndNotify();
     }
-  }, [claimTxConfirmed, claimTxHash, refetchStaking, showToast]);
+  }, [claimTxConfirmed, claimTxHash, refetchAllData, showToast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

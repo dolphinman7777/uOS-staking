@@ -110,12 +110,28 @@ export const useStakingRewards = () => {
         args: [parseEther(amount)]
       });
       
+      // Immediately trigger query invalidation to refresh data
+      setTimeout(async () => {
+        await invalidateQueries();
+        await refetchLPBalance();
+        await refetchStakedBalance();
+      }, 1000);
+      
+      // Also set up a polling interval to keep checking until data is updated
+      const pollInterval = setInterval(async () => {
+        await refetchLPBalance();
+        await refetchStakedBalance();
+      }, 3000);
+      
+      // Clear polling after 30 seconds 
+      setTimeout(() => clearInterval(pollInterval), 30000);
+      
       return hash;
     } catch (error) {
       console.error('Staking failed:', error);
       throw error;
     }
-  }, [writeStakeAsync]);
+  }, [writeStakeAsync, invalidateQueries, refetchLPBalance, refetchStakedBalance]);
 
   // 10. stakingrewards.withdraw(amount)
   const handleWithdraw = useCallback(async (amount: string) => {
@@ -181,5 +197,15 @@ export const useStakingRewards = () => {
 
     // Refetch functions
     refetch: invalidateQueries,
+    refetchAllData: async () => {
+      await Promise.all([
+        refetchTotalLP(),
+        refetchLPBalance(),
+        refetchStakedBalance(),
+        refetchEarned(),
+        refetchAllowance()
+      ]);
+    },
+    refetchLPBalance
   };
 }; 

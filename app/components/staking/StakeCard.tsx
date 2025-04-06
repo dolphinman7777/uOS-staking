@@ -15,15 +15,22 @@ export const StakeCard = () => {
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
   const { address } = useAccount();
   const { showToast } = useToast();
-  const { balance, refetch: refetchBalance } = useTokenBalance(CONTRACTS.LP_TOKEN);
+  
+  // We'll use both balance sources but prefer the one from staking rewards
+  const { balance: tokenBalance, refetch: refetchTokenBalance } = useTokenBalance(CONTRACTS.LP_TOKEN);
   const { 
     handleStake, 
     isStaking, 
     isApproved, 
     handleApprove, 
     isApproving,
-    refetch: refetchStaking
+    refetchAllData,
+    refetchLPBalance,
+    lpBalance
   } = useStakingRewards();
+  
+  // Use the lpBalance directly from the staking rewards hook
+  const displayBalance = lpBalance;
   
   // Watch for transaction confirmation
   const { isLoading: isWaitingForTransaction, isSuccess: txConfirmed } = 
@@ -32,16 +39,28 @@ export const StakeCard = () => {
       confirmations: 1
     });
     
+  // Auto refresh data on a timer
+  useEffect(() => {
+    // Initial fetch
+    refetchAllData();
+    refetchTokenBalance();
+    
+    const intervalId = setInterval(() => {
+      refetchAllData();
+      refetchTokenBalance();
+    }, 3000); // Refresh every 3 seconds
+    
+    return () => clearInterval(intervalId);
+  }, [refetchAllData, refetchTokenBalance]);
+  
   // When transaction is confirmed, show success toast and refresh data
   useEffect(() => {
     if (txConfirmed && txHash) {
       const updateDataAndNotify = async () => {
         try {
-          // Refresh data
-          await Promise.all([
-            refetchBalance(),
-            refetchStaking()
-          ]);
+          // Force refresh all data
+          await refetchAllData();
+          await refetchTokenBalance();
           
           // Show success notification after data is refreshed
           showToast('Successfully staked LP tokens!', 'success');
@@ -55,7 +74,7 @@ export const StakeCard = () => {
       
       updateDataAndNotify();
     }
-  }, [txConfirmed, txHash, refetchBalance, refetchStaking, showToast]);
+  }, [txConfirmed, txHash, refetchAllData, refetchTokenBalance, showToast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +96,16 @@ export const StakeCard = () => {
         
         // Reset amount input
         setAmount('');
+        
+        // Immediately refresh balances and then set up a polling interval
+        // to keep refreshing until we see the change
+        const refreshInterval = setInterval(async () => {
+          await refetchAllData();
+          await refetchTokenBalance();
+        }, 2000);
+        
+        // Stop polling after 30 seconds if for some reason it doesn't work
+        setTimeout(() => clearInterval(refreshInterval), 30000);
       }
     } catch (error) {
       console.error('Stake transaction error:', error);
@@ -94,6 +123,15 @@ export const StakeCard = () => {
       const hash = await handleApprove();
       if (hash) {
         showToast('Approval transaction sent! Waiting for confirmation...', 'success');
+        
+        // Set up polling to refresh data until we see the approval state change
+        const refreshInterval = setInterval(async () => {
+          await refetchAllData();
+          await refetchTokenBalance();
+        }, 2000);
+        
+        // Stop polling after 30 seconds if for some reason it doesn't work
+        setTimeout(() => clearInterval(refreshInterval), 30000);
       }
     } catch (error) {
       showToast(
@@ -110,7 +148,7 @@ export const StakeCard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="bg-[#d8d8d8] rounded-xl p-4 noise">
           <div className="text-2xl md:text-4xl font-semibold text-[#4a5568] mb-2">
-            {Number(balance).toLocaleString()} 
+            {Number(displayBalance).toLocaleString()} 
           </div>
           <div className="text-sm text-[#64748b]">Wallet Balance</div>
           <div className="text-xs text-[#718096]">LP Token</div>
@@ -139,7 +177,7 @@ export const StakeCard = () => {
           />
           <button
             type="button"
-            onClick={() => setAmount(balance)}
+            onClick={() => setAmount(displayBalance)}
             className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-[#4a5568] text-white px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm font-medium"
           >
             max
@@ -159,7 +197,7 @@ export const StakeCard = () => {
           ) : (
             <Button
               type="submit"
-              disabled={!amount || isStaking || isWaitingForTransaction || Number(amount) <= 0 || Number(amount) > Number(balance)}
+              disabled={!amount || isStaking || isWaitingForTransaction || Number(amount) <= 0 || Number(amount) > Number(displayBalance)}
               className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
             >
               {isStaking ? 'Waiting for signature...' : 
