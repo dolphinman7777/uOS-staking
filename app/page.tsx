@@ -12,7 +12,7 @@ export default function Home() {
     <main className="min-h-screen bg-background px-4 md:px-8 pb-40 md:pb-24">
       <div className="mx-auto max-w-6xl">
         <div className="h-screen flex flex-col justify-center">
-          <h1 className="text-5xl font-normal text-white mb-4">uOS Aerodrome V2 LP Staking</h1>
+          <h1 className="text-5xl font-normal text-white mb-4">uOS Liquidity Incentive Program</h1>
           <p className="text-xl text-gray-400">Stake uOS/ETH liquidity tokens, earn <span className="bg-gradient-to-r from-green-700 via-green-300 to-green-700 text-transparent bg-clip-text font-semibold animate-pulse">$uOS</span> rewards</p>
           <p className="text-sm font-mono text-gray-500 mt-8 mb-8">
             <TypewriterEffect 

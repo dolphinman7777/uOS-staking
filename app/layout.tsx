@@ -7,7 +7,7 @@ import './globals.css';
 import './styles/fonts.css';
 
 export const metadata: Metadata = {
-  title: 'uOS Aerodrome V2 LP Staking',
+  title: 'uOS Liquidity Incentive Program',
   description: 'Stake uOS/ETH liquidity tokens, earn $uOS rewards',
   icons: {
     icon: '/favicon.ico',
