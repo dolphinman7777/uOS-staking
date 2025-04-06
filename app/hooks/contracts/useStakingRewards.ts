@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { CONTRACTS, ERC20_ABI, STAKING_REWARDS_ABI } from '../../config/contracts';
 import { useQueryClient } from '@tanstack/react-query';
@@ -67,10 +67,10 @@ export const useStakingRewards = () => {
   });
 
   // Write contract functions with separate write contracts
-  const { writeContract: writeUniv2, isPending: isApproving } = useWriteContract();
-  const { writeContract: writeStake, isPending: isStaking } = useWriteContract();
-  const { writeContract: writeWithdraw, isPending: isWithdrawing } = useWriteContract();
-  const { writeContract: writeGetReward, isPending: isClaiming } = useWriteContract();
+  const { writeContractAsync: writeUniv2Async, isPending: isApproving } = useWriteContract();
+  const { writeContractAsync: writeStakeAsync, isPending: isStaking } = useWriteContract();
+  const { writeContractAsync: writeWithdrawAsync, isPending: isWithdrawing } = useWriteContract();
+  const { writeContractAsync: writeGetRewardAsync, isPending: isClaiming } = useWriteContract();
 
   const invalidateQueries = async () => {
     await Promise.all([
@@ -85,34 +85,37 @@ export const useStakingRewards = () => {
   const handleApprove = useCallback(async () => {
     if (!CONTRACTS.STAKING_REWARDS) return;
     try {
-      await writeUniv2({
+      const hash = await writeUniv2Async({
         address: CONTRACTS.LP_TOKEN,
         abi: ERC20_ABI,
         functionName: 'approve',
         args: [CONTRACTS.STAKING_REWARDS, BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')],
       });
       await refetchAllowance();
+      return hash;
     } catch (error) {
       console.error('Approval failed:', error);
       throw error;
     }
-  }, [writeUniv2, refetchAllowance]);
+  }, [writeUniv2Async, refetchAllowance]);
 
   // 8. (after approve) stakingrewards.stake(amount)
   const handleStake = useCallback(async (amount: string) => {
     try {
-      await writeStake({
+      // Use async version to get transaction hash
+      const hash = await writeStakeAsync({
         address: CONTRACTS.STAKING_REWARDS,
         abi: STAKING_REWARDS_ABI,
         functionName: 'stake',
         args: [parseEther(amount)]
       });
-      await invalidateQueries();
+      
+      return hash;
     } catch (error) {
       console.error('Staking failed:', error);
       throw error;
     }
-  }, [writeStake, invalidateQueries]);
+  }, [writeStakeAsync]);
 
   // 10. stakingrewards.withdraw(amount)
   const handleWithdraw = useCallback(async (amount: string) => {
@@ -121,34 +124,38 @@ export const useStakingRewards = () => {
     }
     
     try {
-      await writeWithdraw({
+      // Use async version to get transaction hash
+      const hash = await writeWithdrawAsync({
         address: CONTRACTS.STAKING_REWARDS,
         abi: STAKING_REWARDS_ABI,
         functionName: 'withdraw',
         args: [parseEther(amount)]
       });
-      await invalidateQueries();
+      
+      return hash;
     } catch (error) {
       console.error('Withdrawal failed:', error);
       throw error;
     }
-  }, [writeWithdraw, invalidateQueries]);
+  }, [writeWithdrawAsync]);
 
   // 9. stakingrewards.getReward()
   const handleGetReward = useCallback(async () => {
     try {
-      await writeGetReward({
+      // Use async version to get transaction hash
+      const hash = await writeGetRewardAsync({
         address: CONTRACTS.STAKING_REWARDS,
         abi: STAKING_REWARDS_ABI,
         functionName: 'getReward',
         args: []
       });
-      await invalidateQueries();
+      
+      return hash;
     } catch (error) {
       console.error('Reward claim failed:', error);
       throw error;
     }
-  }, [writeGetReward, invalidateQueries]);
+  }, [writeGetRewardAsync]);
 
   return {
     // Read functions

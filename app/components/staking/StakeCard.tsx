@@ -7,11 +7,12 @@ import { Button } from '../shared/Button';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { CONTRACTS } from '@/config/contracts';
-import { useAccount } from 'wagmi';
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { useToast } from '@/providers/ToastProvider';
 
 export const StakeCard = () => {
   const [amount, setAmount] = useState('');
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
   const { address } = useAccount();
   const { showToast } = useToast();
   const { balance, refetch: refetchBalance } = useTokenBalance(CONTRACTS.LP_TOKEN);
@@ -23,21 +24,62 @@ export const StakeCard = () => {
     isApproving,
     refetch: refetchStaking
   } = useStakingRewards();
+  
+  // Watch for transaction confirmation
+  const { isLoading: isWaitingForTransaction, isSuccess: txConfirmed } = 
+    useWaitForTransactionReceipt({ 
+      hash: txHash,
+      confirmations: 1
+    });
+    
+  // When transaction is confirmed, show success toast and refresh data
+  useEffect(() => {
+    if (txConfirmed && txHash) {
+      const updateDataAndNotify = async () => {
+        try {
+          // Refresh data
+          await Promise.all([
+            refetchBalance(),
+            refetchStaking()
+          ]);
+          
+          // Show success notification after data is refreshed
+          showToast('Successfully staked LP tokens!', 'success');
+          
+          // Reset transaction hash
+          setTxHash(undefined);
+        } catch (error) {
+          console.error('Error updating data after confirmation:', error);
+        }
+      };
+      
+      updateDataAndNotify();
+    }
+  }, [txConfirmed, txHash, refetchBalance, refetchStaking, showToast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount) return;
     
     try {
-      await handleStake(amount);
-      showToast('Successfully staked LP tokens', 'success');
-      setAmount(''); // Reset amount after successful stake
-      // Refetch all relevant data
-      await Promise.all([
-        refetchBalance(),
-        refetchStaking()
-      ]);
+      // Show "transaction submitted" toast immediately
+      showToast('Transaction submitted. Please sign in your wallet.', 'success');
+      
+      // Get transaction hash from staking operation
+      const hash = await handleStake(amount);
+      
+      if (hash) {
+        // Set transaction hash to begin monitoring
+        setTxHash(hash);
+        
+        // Show transaction sent toast
+        showToast('Transaction sent! Waiting for confirmation...', 'success');
+        
+        // Reset amount input
+        setAmount('');
+      }
     } catch (error) {
+      console.error('Stake transaction error:', error);
       showToast(
         error instanceof Error ? error.message : 'Failed to stake LP tokens',
         'error'
@@ -47,8 +89,12 @@ export const StakeCard = () => {
 
   const handleApproveClick = async () => {
     try {
-      await handleApprove();
-      showToast('Successfully approved LP tokens', 'success');
+      showToast('Approval transaction submitted. Please sign in your wallet.', 'success');
+      
+      const hash = await handleApprove();
+      if (hash) {
+        showToast('Approval transaction sent! Waiting for confirmation...', 'success');
+      }
     } catch (error) {
       showToast(
         error instanceof Error ? error.message : 'Failed to approve LP tokens',
@@ -108,15 +154,17 @@ export const StakeCard = () => {
               disabled={!amount || isApproving || !address}
               className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
             >
-              {isApproving ? 'Approving...' : 'Approve LP Token'}
+              {isApproving ? 'Waiting for signature...' : 'Approve LP Token'}
             </Button>
           ) : (
             <Button
               type="submit"
-              disabled={!amount || isStaking || Number(amount) <= 0 || Number(amount) > Number(balance)}
+              disabled={!amount || isStaking || isWaitingForTransaction || Number(amount) <= 0 || Number(amount) > Number(balance)}
               className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
             >
-              {isStaking ? 'Staking...' : 'Stake LP Tokens'}
+              {isStaking ? 'Waiting for signature...' : 
+               isWaitingForTransaction ? 'Confirming...' : 
+               'Stake LP Tokens'}
             </Button>
           )}
         </div>

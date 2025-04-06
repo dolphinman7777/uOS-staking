@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../shared/Card';
 import { Input } from '../shared/Input';
 import { Button } from '../shared/Button';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
+import { useWaitForTransactionReceipt } from 'wagmi';
 import { useToast } from '@/providers/ToastProvider';
 
 export const UnstakeCard = () => {
   const [amount, setAmount] = useState('');
+  const [withdrawTxHash, setWithdrawTxHash] = useState<`0x${string}` | undefined>(undefined);
+  const [claimTxHash, setClaimTxHash] = useState<`0x${string}` | undefined>(undefined);
   const { showToast } = useToast();
   const { 
     stakedBalance, 
@@ -20,16 +23,87 @@ export const UnstakeCard = () => {
     refetch: refetchStaking
   } = useStakingRewards();
 
+  // Watch for withdraw transaction confirmation
+  const { isLoading: isWaitingForWithdraw, isSuccess: withdrawTxConfirmed } = 
+    useWaitForTransactionReceipt({ 
+      hash: withdrawTxHash,
+      confirmations: 1
+    });
+    
+  // Watch for claim rewards transaction confirmation
+  const { isLoading: isWaitingForClaim, isSuccess: claimTxConfirmed } = 
+    useWaitForTransactionReceipt({ 
+      hash: claimTxHash,
+      confirmations: 1
+    });
+    
+  // When withdraw transaction is confirmed, show success toast and refresh data
+  useEffect(() => {
+    if (withdrawTxConfirmed && withdrawTxHash) {
+      const updateDataAndNotify = async () => {
+        try {
+          // Refresh data
+          await refetchStaking();
+          
+          // Show success notification after data is refreshed
+          showToast('Successfully unstaked LP tokens!', 'success');
+          
+          // Reset transaction hash
+          setWithdrawTxHash(undefined);
+        } catch (error) {
+          console.error('Error updating data after confirmation:', error);
+        }
+      };
+      
+      updateDataAndNotify();
+    }
+  }, [withdrawTxConfirmed, withdrawTxHash, refetchStaking, showToast]);
+  
+  // When claim transaction is confirmed, show success toast and refresh data
+  useEffect(() => {
+    if (claimTxConfirmed && claimTxHash) {
+      const updateDataAndNotify = async () => {
+        try {
+          // Refresh data
+          await refetchStaking();
+          
+          // Show success notification after data is refreshed
+          showToast('Successfully claimed rewards!', 'success');
+          
+          // Reset transaction hash
+          setClaimTxHash(undefined);
+        } catch (error) {
+          console.error('Error updating data after confirmation:', error);
+        }
+      };
+      
+      updateDataAndNotify();
+    }
+  }, [claimTxConfirmed, claimTxHash, refetchStaking, showToast]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount) return;
     
     try {
-      await handleWithdraw(amount);
-      showToast('Successfully unstaked LP tokens', 'success');
-      setAmount(''); // Reset amount after successful unstake
-      await refetchStaking(); // Refetch all staking data
+      // Show "transaction submitted" toast immediately
+      showToast('Transaction submitted. Please sign in your wallet.', 'success');
+      
+      // Get transaction hash from withdraw operation
+      const hash = await handleWithdraw(amount);
+      
+      if (hash) {
+        // Set transaction hash to begin monitoring
+        setWithdrawTxHash(hash);
+        
+        // Show transaction sent toast
+        showToast('Transaction sent! Waiting for confirmation...', 'success');
+        
+        // Reset amount input
+        setAmount('');
+      }
     } catch (error) {
+      console.error('Unstake transaction error:', error);
       showToast(
         error instanceof Error ? error.message : 'Failed to unstake LP tokens',
         'error'
@@ -39,10 +113,21 @@ export const UnstakeCard = () => {
 
   const handleClaimRewards = async () => {
     try {
-      await handleGetReward();
-      showToast('Successfully claimed rewards', 'success');
-      await refetchStaking(); // Refetch all staking data
+      // Show "transaction submitted" toast immediately
+      showToast('Transaction submitted. Please sign in your wallet.', 'success');
+      
+      // Get transaction hash from claim operation
+      const hash = await handleGetReward();
+      
+      if (hash) {
+        // Set transaction hash to begin monitoring
+        setClaimTxHash(hash);
+        
+        // Show transaction sent toast
+        showToast('Transaction sent! Waiting for confirmation...', 'success');
+      }
     } catch (error) {
+      console.error('Claim rewards transaction error:', error);
       showToast(
         error instanceof Error ? error.message : 'Failed to claim rewards',
         'error'
@@ -100,17 +185,21 @@ export const UnstakeCard = () => {
           <Button
             type="button"
             onClick={handleClaimRewards}
-            disabled={!earned || isClaiming}
+            disabled={!earned || isClaiming || isWaitingForClaim}
             className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
           >
-            {isClaiming ? 'Claiming...' : 'Claim Rewards'}
+            {isClaiming ? 'Waiting for signature...' : 
+             isWaitingForClaim ? 'Confirming...' : 
+             'Claim Rewards'}
           </Button>
           <Button
             type="submit"
-            disabled={!amount || isWithdrawing || Number(amount) <= 0 || Number(amount) > Number(stakedBalance)}
+            disabled={!amount || isWithdrawing || isWaitingForWithdraw || Number(amount) <= 0 || Number(amount) > Number(stakedBalance)}
             className="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 transition-colors disabled:bg-gray-200 disabled:text-gray-400"
           >
-            {isWithdrawing ? 'Unstaking...' : 'Unstake LP Tokens'}
+            {isWithdrawing ? 'Waiting for signature...' : 
+             isWaitingForWithdraw ? 'Confirming...' : 
+             'Unstake LP Tokens'}
           </Button>
         </div>
       </form>

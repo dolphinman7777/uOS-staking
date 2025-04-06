@@ -35,7 +35,9 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
         <Toast
           message={toast.message}
           type={toast.type}
-          onClose={() => setToast(null)}
+          onClose={() => {
+            setToast(null);
+          }}
         />
       )}
     </ToastContext.Provider>
