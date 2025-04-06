@@ -96,7 +96,7 @@ export default function BottomNavigation() {
             </DropdownMenu>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-0.5 hover:text-gray-300 transition-colors bg-black text-white rounded-full shadow-lg px-2 py-0.5">
-                $uOS
+                <span className="bg-gradient-to-r from-green-700 via-green-300 to-green-700 text-transparent bg-clip-text font-semibold animate-pulse">$uOS</span>
                 <ChevronDown className="w-3 h-3" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-[200px] md:w-[240px]">
