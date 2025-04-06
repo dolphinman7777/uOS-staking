@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background px-4 md:px-8 pb-24">
+    <main className="min-h-screen bg-background px-4 md:px-8 pb-40 md:pb-24">
       <div className="mx-auto max-w-6xl">
         <div className="h-screen flex flex-col justify-center">
           <h1 className="text-5xl font-normal text-white mb-4">uOS Aerodrome V2 LP Staking</h1>
