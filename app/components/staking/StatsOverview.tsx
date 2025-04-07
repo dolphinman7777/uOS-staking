@@ -7,7 +7,7 @@ import { useStakingAPR } from '@/hooks/contracts/useStakingAPR';
 import Image from 'next/image';
 
 export const StatsOverview = () => {
-  const { totalLPInStaking, earned } = useStakingRewards();
+  const { totalLPInStaking, earned, remainingDays, rewardsDuration } = useStakingRewards();
   const { apr, isLoading: isLoadingAPR } = useStakingAPR();
 
   return (
@@ -19,6 +19,11 @@ export const StatsOverview = () => {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
+        </p>
+        <p className="text-sm text-[#64748b] mt-2">
+          {remainingDays > 0 
+            ? `${remainingDays} days remaining in rewards period`
+            : 'Rewards period has ended'}
         </p>
       </div>
 

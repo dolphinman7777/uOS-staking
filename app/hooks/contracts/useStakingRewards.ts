@@ -66,6 +66,25 @@ export const useStakingRewards = () => {
     args: connected_address ? [connected_address] : undefined
   });
 
+  // Get periodFinish timestamp
+  const { data: periodFinish } = useReadContract({
+    address: CONTRACTS.STAKING_REWARDS,
+    abi: STAKING_REWARDS_ABI,
+    functionName: 'periodFinish',
+  });
+
+  // Get rewards duration
+  const { data: rewardsDuration } = useReadContract({
+    address: CONTRACTS.STAKING_REWARDS,
+    abi: STAKING_REWARDS_ABI,
+    functionName: 'rewardsDuration',
+  });
+
+  // Calculate remaining time in days
+  const remainingTime = periodFinish ? 
+    Math.max(0, Number(periodFinish) - Math.floor(Date.now() / 1000)) : 0;
+  const remainingDays = Math.ceil(remainingTime / (24 * 60 * 60));
+
   // Write contract functions with separate write contracts
   const { writeContractAsync: writeUniv2Async, isPending: isApproving } = useWriteContract();
   const { writeContractAsync: writeStakeAsync, isPending: isStaking } = useWriteContract();
@@ -179,6 +198,10 @@ export const useStakingRewards = () => {
     lpBalance: lpBalance ? formatEther(lpBalance as bigint) : '0',
     stakedBalance: stakedBalance ? formatEther(stakedBalance as bigint) : '0',
     earned: earned ? formatEther(earned as bigint) : '0',
+    
+    // Rewards period information
+    rewardsDuration: rewardsDuration ? Number(rewardsDuration) / (24 * 60 * 60) : 0, // Convert to days
+    remainingDays,
     
     // Write functions
     handleApprove,
