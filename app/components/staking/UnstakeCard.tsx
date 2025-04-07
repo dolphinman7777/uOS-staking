@@ -116,10 +116,19 @@ export const UnstakeCard = () => {
       }
     } catch (error) {
       console.error('Unstake transaction error:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to unstake LP tokens',
-        'error'
-      );
+      
+      // Check for user rejection error
+      if (error instanceof Error && 
+          (error.message.includes('User rejected') || 
+           error.message.includes('User denied') ||
+           error.message.includes('User rejected the request'))) {
+        showToast('Transaction cancelled. You can try again when ready.', 'success');
+      } else {
+        showToast(
+          error instanceof Error ? error.message : 'Failed to unstake LP tokens',
+          'error'
+        );
+      }
     }
   };
 
@@ -140,10 +149,19 @@ export const UnstakeCard = () => {
       }
     } catch (error) {
       console.error('Claim rewards transaction error:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to claim rewards',
-        'error'
-      );
+      
+      // Check for user rejection error
+      if (error instanceof Error && 
+          (error.message.includes('User rejected') || 
+           error.message.includes('User denied') ||
+           error.message.includes('User rejected the request'))) {
+        showToast('Transaction cancelled. You can try again when ready.', 'success');
+      } else {
+        showToast(
+          error instanceof Error ? error.message : 'Failed to claim rewards',
+          'error'
+        );
+      }
     }
   };
 

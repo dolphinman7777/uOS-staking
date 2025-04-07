@@ -109,10 +109,19 @@ export const StakeCard = () => {
       }
     } catch (error) {
       console.error('Stake transaction error:', error);
-      showToast(
-        error instanceof Error ? error.message : 'Failed to stake LP tokens',
-        'error'
-      );
+      
+      // Check for user rejection error
+      if (error instanceof Error && 
+          (error.message.includes('User rejected') || 
+           error.message.includes('User denied') ||
+           error.message.includes('User rejected the request'))) {
+        showToast('Transaction cancelled. You can try again when ready.', 'success');
+      } else {
+        showToast(
+          error instanceof Error ? error.message : 'Failed to stake LP tokens',
+          'error'
+        );
+      }
     }
   };
 
@@ -134,10 +143,20 @@ export const StakeCard = () => {
         setTimeout(() => clearInterval(refreshInterval), 30000);
       }
     } catch (error) {
-      showToast(
-        error instanceof Error ? error.message : 'Failed to approve LP tokens',
-        'error'
-      );
+      console.error('Approval transaction error:', error);
+      
+      // Check for user rejection error
+      if (error instanceof Error && 
+          (error.message.includes('User rejected') || 
+           error.message.includes('User denied') ||
+           error.message.includes('User rejected the request'))) {
+        showToast('Transaction cancelled. You can try again when ready.', 'success');
+      } else {
+        showToast(
+          error instanceof Error ? error.message : 'Failed to approve LP tokens',
+          'error'
+        );
+      }
     }
   };
 
