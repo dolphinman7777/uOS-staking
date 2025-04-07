@@ -31,24 +31,25 @@ export const StatsOverview = () => {
               maximumFractionDigits: 2,
             })}
           </p>
-          <Image src="/token-svg.svg" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
+          <Image src="/uos-green.png" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
         </div>
       </div>
 
       <div className="bg-[#e5e5e5] rounded-2xl p-4 md:p-6 noise">
         <h3 className="text-sm md:text-base font-medium text-[#64748b] mb-2">Current APR</h3>
         <div className="flex items-center justify-between">
-          <p className="text-2xl md:text-4xl font-semibold text-[#4a5568]">
+          <p className="text-2xl md:text-4xl font-semibold text-[#4a5568] truncate">
             {isLoadingAPR ? (
               <span className="text-gray-400">Loading...</span>
             ) : (
               `${Number(apr).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 0,
+                notation: "compact",
+                compactDisplay: "short"
               })}%`
             )}
           </p>
-          <Image src="/token-svg.svg" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
+          <Image src="/uos-green.png" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
         </div>
       </div>
     </div>
