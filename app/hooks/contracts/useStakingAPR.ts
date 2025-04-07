@@ -42,7 +42,7 @@ export const useStakingAPR = () => {
     }
 
     // First calculate APR per LP token staked
-    const aprPerLPTokenStaked = (Number(rewardRate) * Number(totalSupply) * ONE_YEAR_IN_SECONDS * 100);
+    const aprPerLPTokenStaked = (Number(rewardRate) / Number(totalSupply) * ONE_YEAR_IN_SECONDS * 100);
     
     // Then calculate APR per uOS provided in liquidity
     const aprPerUOSProvided = (aprPerLPTokenStaked * Number(lpTotalSupply)) / Number(uOSInLP);
