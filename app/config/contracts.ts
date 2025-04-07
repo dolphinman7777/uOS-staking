@@ -98,6 +98,18 @@ export const ERC20_ABI = [
   },
 ] as const;
 
+export type StakingRewardsContract = {
+  totalSupply: () => Promise<bigint>;
+  balanceOf: (account: string) => Promise<bigint>;
+  earned: (account: string) => Promise<bigint>;
+  rewardRate: () => Promise<bigint>;
+  rewardsDuration: () => Promise<bigint>;
+  getRewardForDuration: () => Promise<bigint>;
+  lastTimeRewardApplicable: () => Promise<bigint>;
+  rewardPerToken: () => Promise<bigint>;
+  periodFinish: () => Promise<bigint>;
+};
+
 export const STAKING_REWARDS_ABI = [
   // View Functions
   {
@@ -131,6 +143,13 @@ export const STAKING_REWARDS_ABI = [
   {
     inputs: [],
     name: "rewardsDuration",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "periodFinish",
     outputs: [{ name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
