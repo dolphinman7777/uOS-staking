@@ -36,7 +36,7 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: API_ETHERSCAN,
+    apiKey: API_BASESCAN,
     customChains: [
       {
         network: "sepolia",

@@ -149,7 +149,7 @@ contract StakingRewards is IStakingRewards, Ownable, ReentrancyGuard {
         return _totalSupply;
     }
 
-    /// @notice Returns the veStaking balance of `account`
+    /// @notice Returns the staking balance of `account`
     function balanceOf(address account) external view returns (uint256) {
         return _balances[account];
     }
