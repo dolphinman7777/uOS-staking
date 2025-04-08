@@ -196,7 +196,7 @@ export const LPStakingOverview = () => {
               <p className="text-2xl font-medium text-gray-900">{earned}</p>
               <div className="text-sm text-gray-500">
                 <p>Claimable Rewards</p>
-                <p>LP Token</p>
+                <p>$uOS</p>
               </div>
             </div>
           </div>

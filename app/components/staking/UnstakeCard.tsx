@@ -186,7 +186,7 @@ export const UnstakeCard = () => {
             })}
           </div>
           <div className="text-sm text-[#64748b]">Claimable Rewards</div>
-          <div className="text-xs text-[#718096]">LP Token</div>
+          <div className="text-xs text-[#718096]">$uOS</div>
         </div>
       </div>
 
@@ -198,8 +198,16 @@ export const UnstakeCard = () => {
           <input
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Only set the amount if it's empty or a positive number
+              if (value === '' || Number(value) >= 0) {
+                setAmount(value);
+              }
+            }}
             placeholder="Amount of LP Token to unstake"
+            min="0"
+            step="any"
             className="w-full pl-20 md:pl-28 pr-16 md:pr-20 py-3 md:py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a5568]/20 bg-[#d8d8d8] text-sm md:text-base"
           />
           <button
