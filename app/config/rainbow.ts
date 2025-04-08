@@ -1,15 +1,15 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { sepolia } from 'viem/chains';
+import { base } from 'viem/chains';
 
-const sepoliaChain = {
-  ...sepolia,
+const baseChain = {
+  ...base,
   rpcUrls: {
-    ...sepolia.rpcUrls,
+    ...base.rpcUrls,
     default: {
-      http: [`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`],
+      http: [`https://base-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`],
     },
     public: {
-      http: [`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`],
+      http: [`https://base-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`],
     },
   },
 };
@@ -17,6 +17,6 @@ const sepoliaChain = {
 export const config = getDefaultConfig({
   appName: 'uOS Finance',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
-  chains: [sepoliaChain],
+  chains: [baseChain],
   ssr: true,
 }); 
