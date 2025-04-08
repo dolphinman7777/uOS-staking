@@ -112,7 +112,7 @@ export const LPStakingOverview = () => {
         </Card>
 
         <Card className="p-6">
-          <h3 className="text-lg font-medium text-purple-600">Your Earned Rewards</h3>
+          <h3 className="text-lg font-medium text-purple-600">Your Earned $uOS Rewards</h3>
           <p className="text-2xl font-medium text-gray-900 mt-2">{earned}</p>
         </Card>
 

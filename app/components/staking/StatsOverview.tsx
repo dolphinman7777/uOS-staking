@@ -28,7 +28,7 @@ export const StatsOverview = () => {
       </div>
 
       <div className="bg-[#e5e5e5] rounded-2xl p-4 md:p-6 noise">
-        <h3 className="text-sm md:text-base font-medium text-[#64748b] mb-2">Your Earned Rewards</h3>
+        <h3 className="text-sm md:text-base font-medium text-[#64748b] mb-2">Your Earned $uOS Rewards</h3>
         <div className="flex items-center justify-between">
           <p className="text-2xl md:text-4xl font-semibold text-[#4a5568]">
             {Number(earned).toLocaleString(undefined, {
