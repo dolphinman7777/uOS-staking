@@ -138,7 +138,7 @@ export default function BottomNavigation() {
           {/* Desktop Docs and Github - Only show on desktop */}
           <div className="hidden md:flex gap-2 justify-end">
             <Link
-              href="https://universal-operating-system.gitbook.io/universal-operating-system"
+              href="https://universal-operating-system.gitbook.io/universal-operating-system/tokenomics/staking"
               className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm"
               target="_blank"
               rel="noopener noreferrer"
@@ -147,7 +147,7 @@ export default function BottomNavigation() {
               Docs
             </Link>
             <Link
-              href="https://github.com/dolphinman7777"
+              href="https://github.com/dolphinman7777/uOS-staking"
               className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-sm"
               target="_blank"
               rel="noopener noreferrer"
@@ -161,7 +161,7 @@ export default function BottomNavigation() {
         {/* Mobile Docs and Github - Bottom Row */}
         <div className="flex justify-between mt-3 md:hidden">
           <Link
-            href="https://universal-operating-system.gitbook.io/universal-operating-system"
+            href="https://universal-operating-system.gitbook.io/universal-operating-system/tokenomics/staking"
             className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-xs"
             target="_blank"
             rel="noopener noreferrer"
@@ -170,7 +170,7 @@ export default function BottomNavigation() {
             Docs
           </Link>
           <Link
-            href="https://github.com/dolphinman7777"
+            href="https://github.com/dolphinman7777/uOS-staking"
             className="flex items-center gap-1 text-white hover:text-gray-300 transition-colors text-xs"
             target="_blank"
             rel="noopener noreferrer"
