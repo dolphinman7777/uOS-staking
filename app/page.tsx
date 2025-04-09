@@ -5,13 +5,14 @@ import { StatsOverview } from './components/staking/StatsOverview';
 import { StakeCard } from './components/staking/StakeCard';
 import { UnstakeCard } from './components/staking/UnstakeCard';
 import { TypewriterEffect } from './components/TypewriterEffect';
+import { ScrollIndicator } from './components/ScrollIndicator';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background px-4 md:px-8 pb-40 md:pb-24">
       <div className="mx-auto max-w-6xl">
-        <div className="h-screen flex flex-col justify-center">
+        <div className="h-screen flex flex-col justify-center relative">
           <h1 className="text-5xl font-normal text-white mb-4">uOS Liquidity Incentive Program</h1>
           <p className="text-xl text-gray-400">Stake uOS/ETH liquidity tokens, earn <span className="bg-gradient-to-r from-green-700 via-green-300 to-green-700 text-transparent bg-clip-text font-semibold animate-pulse">$uOS</span> rewards</p>
           <p className="text-sm font-mono text-gray-500 mt-8 mb-8">
@@ -37,6 +38,7 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </Link>
+          <ScrollIndicator />
         </div>
 
         <div className="space-y-16">
