@@ -79,19 +79,6 @@ export default function BottomNavigation() {
                     Telegram
                   </Link>
                 </DropdownMenuItem>
-
-                {/* Trading */}
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="https://dexscreener.com/solana/7xhhhvbtzwqqnyqubkbmu8t6cjoqmguzcgd2xku2sdst"
-                    className="flex items-center gap-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ArrowUpRight className="w-4 h-4" />
-                    DexScreener
-                  </Link>
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
