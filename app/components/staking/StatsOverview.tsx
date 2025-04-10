@@ -10,6 +10,20 @@ export const StatsOverview = () => {
   const { totalLPInStaking, earned, remainingDays, rewardsDuration } = useStakingRewards();
   const { apr, isLoading: isLoadingAPR } = useStakingAPR();
 
+  const formatAPR = (value: number) => {
+    if (value >= 10000) {
+      return value.toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+        notation: "compact",
+        compactDisplay: "short"
+      });
+    }
+    return value.toLocaleString(undefined, {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2
+    });
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
       <div className="bg-[#e5e5e5] rounded-2xl p-4 md:p-6 noise">
@@ -47,11 +61,7 @@ export const StatsOverview = () => {
             {isLoadingAPR ? (
               <span className="text-gray-400">Loading...</span>
             ) : (
-              `${Number(apr).toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-                notation: "compact",
-                compactDisplay: "short"
-              })}%`
+              `${formatAPR(Number(apr))}%`
             )}
           </p>
           <Image src="/uos-green.png" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
