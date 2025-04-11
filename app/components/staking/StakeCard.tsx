@@ -26,7 +26,8 @@ export const StakeCard = () => {
     isApproving,
     refetchAllData,
     refetchLPBalance,
-    lpBalance
+    lpBalance,
+    remainingDays
   } = useStakingRewards();
   
   // Use the lpBalance directly from the staking rewards hook
@@ -175,10 +176,10 @@ export const StakeCard = () => {
 
         <div className="bg-[#d8d8d8] rounded-xl p-4 noise">
           <div className="text-2xl md:text-4xl font-semibold text-[#4a5568] mb-2">
-            120
+            {remainingDays}
           </div>
           <div className="text-sm text-[#64748b]">Rewards Period</div>
-          <div className="text-xs text-[#718096]">Days</div>
+          <div className="text-xs text-[#718096]">Days Remaining</div>
         </div>
       </div>
 

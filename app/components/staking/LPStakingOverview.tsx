@@ -39,6 +39,7 @@ export const LPStakingOverview = () => {
     isStaking,
     isWithdrawing,
     isClaiming,
+    remainingDays
   } = useStakingRewards();
 
   const { balance: lpBalance } = useTokenBalance(CONTRACTS.LP_TOKEN);
@@ -138,10 +139,10 @@ export const LPStakingOverview = () => {
               </div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-2xl font-medium text-gray-900">120</p>
+              <p className="text-2xl font-medium text-gray-900">{remainingDays}</p>
               <div className="text-sm text-gray-500">
                 <p>Rewards Period</p>
-                <p>Days</p>
+                <p>Days Remaining</p>
               </div>
             </div>
           </div>
