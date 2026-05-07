@@ -3,6 +3,7 @@
 import React from 'react';
 import { Card } from '../shared/Card';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
+import { AprDeprecationCallout } from '@/components/staking/AprDeprecationCallout';
 import { useStakingAPR } from '@/hooks/contracts/useStakingAPR';
 import Image from 'next/image';
 
@@ -66,6 +67,7 @@ export const StatsOverview = () => {
           </p>
           <Image src="/uos-green.png" alt="uOS token" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
         </div>
+        <AprDeprecationCallout variant="onLight" className="mt-3" />
       </div>
     </div>
   );

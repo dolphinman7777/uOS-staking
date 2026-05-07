@@ -4,6 +4,7 @@ import { Card } from '@/components/shared/Card';
 import { Button } from '@/components/shared/Button';
 import { Input } from '@/components/shared/Input';
 import { useStakingRewards } from '@/hooks/contracts/useStakingRewards';
+import { AprDeprecationCallout } from '@/components/staking/AprDeprecationCallout';
 import { useStakingAPR } from '@/hooks/contracts/useStakingAPR';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { useToast } from '@/providers/ToastProvider';
@@ -122,6 +123,7 @@ export const LPStakingOverview = () => {
           <p className="text-2xl font-medium text-gray-900 mt-2">
             {isLoadingAPR ? 'Loading...' : `${Number(apr).toFixed(2)}%`}
           </p>
+          <AprDeprecationCallout variant="onLight" className="mt-3" />
         </Card>
       </div>
 

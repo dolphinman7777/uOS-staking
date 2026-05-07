@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { AprDeprecationCallout } from './components/staking/AprDeprecationCallout';
 import { StatsOverview } from './components/staking/StatsOverview';
 import { StakeCard } from './components/staking/StakeCard';
 import { UnstakeCard } from './components/staking/UnstakeCard';
@@ -42,6 +43,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-16">
+          <AprDeprecationCallout variant="onDark" className="text-sm px-4 py-3" />
           <StatsOverview />
           
           <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
